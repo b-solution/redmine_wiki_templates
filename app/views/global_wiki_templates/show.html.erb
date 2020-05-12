@@ -1,0 +1,23 @@
+<div class='contextual'>
+<%= link_to l(:button_delete),
+  { controller: 'global_wiki_templates', action: 'destroy', id: wiki_template },
+    data: { confirm: l(:text_are_you_sure) },
+    title: l(:enabled_template_cannot_destroy, default: 'Only disabled template can be destroyed.'),
+    disabled: wiki_template.enabled?, method: 'delete', class: 'icon icon-del template-disabled-link' %>
+<%= link_to(l(:label_list_templates),
+              { controller: 'global_wiki_templates', action: 'index' }, class: 'icon icon-template') %>
+</div>
+
+<h2 class='global_wiki_template'>
+  <%= l(:global_wiki_templates) %>: #<%= wiki_template.id %> <%= wiki_template.title %>
+  <%= avatar(wiki_template.author, size: '24') %>
+</h2>
+
+<%= labelled_form_for :global_wiki_template,
+                      wiki_template,
+                      url: { controller: 'global_wiki_templates', action: 'update', id: wiki_template },
+                      html: { id: 'global_wiki_template-form', class: nil,
+                              multipart: false } do |f| %>
+  <%= render 'form', { f: f, checklist_enabled: checklist_enabled,
+                        wiki_template: wiki_template, projects: projects, apply_all_projects: apply_all_projects} %>
+<% end %>

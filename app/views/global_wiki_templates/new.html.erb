@@ -1,0 +1,16 @@
+<div class='contextual'>
+  <%= link_to(l(:label_list_templates),
+              { controller: 'global_wiki_templates', action: 'index' }, class: 'icon icon-template') %>
+</div>
+<h2 class='global_wiki_template'><%=h "#{l(:wiki_templates)} / #{l(:button_add)}" %></h2>
+
+<%= labelled_form_for :global_wiki_template,  wiki_template,
+                      url: { controller: 'global_wiki_templates', action: 'create' },
+                      html: { id: 'global_wiki_template-form',
+                                  class: nil, multipart: false } do |f| %>
+
+  <%= render 'form', { f: f, checklist_enabled: checklist_enabled,
+                        projects: projects,
+                        wiki_template: wiki_template, apply_all_projects: apply_all_projects,
+                        builtin_fields_enable: builtin_fields_enable } %>
+<% end %>

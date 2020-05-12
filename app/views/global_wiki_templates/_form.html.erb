@@ -1,0 +1,43 @@
+<%= error_messages_for 'global_wiki_template' %>
+<div class='box tabular box-white'>
+  <p><%= f.text_field :title, required: true, size: 80, label: l(:wiki_template_name) %></p>
+
+  <fieldset class='wiki'>
+    <legend class='wiki'><%= l(:label_applied_for_wiki) %></legend>
+
+    <p>
+      <%= f.text_area :description, cols: 78, rows: 12,
+                      required: true,
+                      label: l(:wiki_description), class: 'wiki-edit', style: 'overflow: auto;' %>
+    </p>
+    <p><%= f.text_field :wiki_title, required: false, size: 80, label: l(:wiki_title) %>
+      <a class='icon icon-help template-help' title='<%= l(:help_for_this_field) %>'
+         data-tooltip-area='wiki_title_help_area'
+         data-tooltip-content='wiki_title_help_content'>
+        <%= l(:help_for_this_field) %>
+        <span class='tooltip-area' id='wiki_title_help_area'></span>
+      </a>
+    </p>
+
+  </fieldset>
+
+
+
+  <p><%= f.check_box :enabled, label: l(:label_enabled) %>
+    <a class='icon icon-help template-help' title='<%= l(:help_for_this_field) %>'
+       data-template-help-target='enabled_help_content'
+       data-tooltip-area='enabled_help_area'
+       data-tooltip-content='enabled_help_content'>
+      <%= l(:help_for_this_field) %>
+      <span class='tooltip-area' id='enabled_help_area'></span>
+    </a>
+  </p>
+</div>
+
+<%= wikitoolbar_for 'global_wiki_template_description' %>
+
+
+<%= submit_tag l(wiki_template.new_record? ? :button_create : :button_save) %>
+<%= link_to l(:button_cancel), { action: 'index' }, data: { confirm: l(:text_are_you_sure) } %>
+
+

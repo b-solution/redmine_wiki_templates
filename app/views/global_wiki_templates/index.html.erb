@@ -1,0 +1,83 @@
+<h2 class='global_wiki_template'><%=h "#{l(:global_wiki_templates)}" %></h2>
+<%= render partial: 'nodata' %>
+<div class='contextual wiki_templates'>
+  <%= link_to(l(:label_new_templates),
+              { controller: 'global_wiki_templates', action: 'new' }, class: 'icon icon-add') %>
+  <%= link_to(l(:label_settings),
+              { controller: 'settings', action: 'plugin', id: 'redmine_wiki_templates' },
+              class: 'wiki_template icon plugins') %>
+</div>
+<div style='clear: both;'></div>
+
+<% if template_map.blank? %>
+    <div class='template_box'>
+      <%= l(:no_wiki_templates_for_this_redmine) %>
+    </div>
+<% end %>
+
+    <div class='template_box'>
+
+      <table class='list issues ui-sortable table-sortable'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th class='hideable'><%= l(:wiki_template_name) %></th>
+          <th><%= l(:label_preview) %></th>
+          <th class='hideable'><%= l(:field_author) %></th>
+          <th class='hideable'><%= l(:field_updated_on) %></th>
+          <th><%= l(:label_enabled) %></th>
+          <th><%=l(:button_sort)%></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% template_map.sorted.each do |wiki_template| %>
+            <tr class='<%= cycle('odd', 'even') %> wiki_template issue'>
+              <td><%= link_to h(wiki_template.id), { controller: 'global_wiki_templates',
+                                                      id: wiki_template.id, action: 'show' },
+                              { title: wiki_template.title } %>
+              </td>
+              <td class='hideable template_title'>
+                <%= link_to h(wiki_template.title), { controller: 'global_wiki_templates',
+                                                         id: wiki_template.id, action: 'show' },
+                              { title: "#{html_escape(wiki_template.note)}" } %>
+              </td>
+              <td>
+                <div class='template_tooltip_wrapper'>
+                  <a class='icon template_tooltip' title='<%= l(:label_preview) %>'></a>
+                  <div class='wiki template_tooltip_body'>
+                    <span class='title'><%= wiki_template.title %></span>
+                    <%= textilizable(wiki_template.description) %>
+                    <% if wiki_template.related_link.present? %>
+                      <hr/>
+                      <%= link_to wiki_template.link_title.present? ? wiki_template.link_title : l(:wiki_template_related_link, default: 'Related link'),
+                          wiki_template.related_link, target: '_blank', rel: 'nofollow noopener', class: 'external' %>
+                    <% end %>
+                  </div>
+                </div>
+                </a>
+              </td>
+
+              <td class='hideable'><%=h wiki_template.author %></td>
+              <td class='hideable'><%= format_time(wiki_template.updated_on)%> </td>
+
+              <td class='center'><%= checked_image wiki_template.enabled? %></td>
+
+              <td class='buttons'>
+                <%= reorder_handle(wiki_template, :url => url_for({ controller: 'global_wiki_templates',
+                                                             id: wiki_template.id, action: 'update' })) %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <%= javascript_tag do %>
+      // NOTE: Sortable feature depends on Redmine's sorting jQuery plugin.
+      $(function() { $('table.table-sortable tbody').positionedItems() })
+    <% end %>
+
+
+
+<div id='orphaned_templates' style='display: none'></div>
+
